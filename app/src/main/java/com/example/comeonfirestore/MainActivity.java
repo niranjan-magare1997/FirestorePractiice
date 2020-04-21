@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             mAuth = FirebaseAuth.getInstance();
 
-            addData = (Button) findViewById(R.id.Add_Data);
-            getData = (Button) findViewById(R.id.Get_Data);
+            addData = findViewById(R.id.Add_Data);
+            getData = findViewById(R.id.Get_Data);
 
-            getName = (EditText) findViewById(R.id.Name);
-            getSurname = (EditText) findViewById(R.id.Surname);
+            getName = findViewById(R.id.Name);
+            getSurname = findViewById(R.id.Surname);
 
             addData.setOnClickListener(MainActivity.this);
             getData.setOnClickListener(MainActivity.this);
@@ -162,9 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             integerList.add("TEN");
             integerList.add("TWENTY");
 
-            String[] integerArray = listToArray(integerList);
-            for (int i = 0; i < integerArray.length; i++) {
-                Log.d(TAG, "Integer Array: " + integerArray[i]);
+            String[] stringArray = listToArray(integerList);
+            for (int i = 0; i < stringArray.length; i++) {
+                Log.d(TAG, "Integer Array: " + stringArray[i]);
             }
             Log.d(TAG, "Integer Array: "+listToArray(integerList));
 
