@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public String TAG = "MainActivity";
-    public Button addData,getData;
+    public Button addData,getData,signUp,signIn;
     public EditText getName,getSurname;
     public String name,surname;
     public String NAME_KEY = "Name";
@@ -53,12 +54,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             addData = findViewById(R.id.Add_Data);
             getData = findViewById(R.id.Get_Data);
+            signIn = findViewById(R.id.signIn);
+            signUp = findViewById(R.id.signUp);
 
             getName = findViewById(R.id.Name);
             getSurname = findViewById(R.id.Surname);
 
             addData.setOnClickListener(MainActivity.this);
             getData.setOnClickListener(MainActivity.this);
+            signIn.setOnClickListener(MainActivity.this);
+            signUp.setOnClickListener(MainActivity.this);
         }catch (Exception e){
             Log.e(TAG, "Exception in setComponentsValues function => \n" + e.toString() );
         }
@@ -95,6 +100,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.Get_Data:
                     Toast.makeText(this, "Get Data Button Clicked", Toast.LENGTH_SHORT).show();
                     getData();
+                    break;
+                case R.id.signIn:
+                    Toast.makeText(this, "Sign In Button Clicked", Toast.LENGTH_SHORT).show();
+                    signInUser();
+                    break;
+                case R.id.signUp:
+                    Toast.makeText(this, "Sign Up Button Clicked", Toast.LENGTH_SHORT).show();
+                    signUpUser();
                     break;
                 default:
                     Toast.makeText(this, "This is default case", Toast.LENGTH_SHORT).show();
@@ -223,5 +236,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }catch (Exception e){
             Log.e(TAG, "Exception in getData function => \n" + e.toString() );
         }
+    }
+
+    public void signUpUser(){
+        String email = getName.getText().toString();
+        String password = getSurname.getText().toString();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    public void signInUser(){
+        String email = getName.getText().toString();
+        String password = getSurname.getText().toString();
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
