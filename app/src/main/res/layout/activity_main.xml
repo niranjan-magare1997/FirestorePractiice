@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,63 +9,97 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/Name"
+        android:id="@+id/NameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Name"/>
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/Surname"
+        android:id="@+id/SurnameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Surname"/>
+        android:hint="Surname"
+        android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/Add_Data"
+        android:id="@+id/Add_Data_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_buttons"
-        android:textAlignment="gravity"
-        android:padding="15dp"
-        android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:text="Add Data" />
+        android:background="@drawable/rounded_buttons"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        android:text="Add Data"
+        android:textAlignment="gravity" />
 
     <Button
-        android:id="@+id/Get_Data"
-        android:textAlignment="center"
+        android:id="@+id/Get_Data_Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rounded_buttons"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
         android:text="Get data"
-        android:padding="15dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:textAlignment="center" />
 
-    <Button
-        android:id="@+id/signUp"
+    <EditText
+        android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_buttons"
-        android:textAlignment="center"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:layout_marginTop="10dp"
-        android:text="Sign Up" />
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/signIn"
+    <EditText
+        android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/signUp_Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rounded_buttons"
-        android:textAlignment="center"
         android:gravity="center_horizontal"
         android:padding="15dp"
-        android:layout_marginTop="10dp"
-        android:text="Sign In" />
+        android:text="Sign Up"
+        android:textAlignment="center" />
 
+    <Button
+        android:id="@+id/signIn_Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_buttons"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        android:text="Sign In"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/phoneEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/sendOtp_Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_buttons"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        android:text="Send OTP"
+        android:textAlignment="center" />
 </LinearLayout>
