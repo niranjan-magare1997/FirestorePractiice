@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void makeToast(String msg){
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
     public String[] listToArray(List<String> list){
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addDataFun(){
         try {
-            Log.d(TAG, "addDataFun: In function addDataFun: ");
+            Log.d(TAG, "addDataFun | In function addDataFun: ");
             String name = getName.getText().toString();
             String sName = getSurname.getText().toString();
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             database.addEmployee(emp);
         }catch (Exception e){
-            Log.e(TAG, "addDataFun: Exception while adding data: " + e.getMessage());
+            Log.e(TAG, "addDataFun |  Exception while adding data: " + e.getMessage());
         }
     }
 
@@ -304,7 +304,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             db.collection("Employee")
                 /**QUERY*/
-                //.whereEqualTo("Name","Niranjan")
+                .whereEqualTo(NAME_KEY,"Niranjan")
+                .whereEqualTo(SURNAME_KEY,"Magare")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -315,7 +316,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }else{
                         Log.e(TAG, "getData | Failed to get data");
-                        makeToast("getData | Data Fetched Failed");
                     }
                     }
                 });
