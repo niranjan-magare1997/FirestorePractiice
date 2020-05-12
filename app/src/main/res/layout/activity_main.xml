@@ -1,105 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="@drawable/beach"
     android:padding="10dp"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/NameEditText"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/SurnameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Surname"
-        android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/NameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
 
-    <Button
-        android:id="@+id/Add_Data_Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_buttons"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Add Data"
-        android:textAlignment="gravity" />
+        <EditText
+            android:id="@+id/SurnameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:ems="10"
+            android:hint="Surname"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
 
-    <Button
-        android:id="@+id/Get_Data_Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_buttons"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Get data"
-        android:textAlignment="center" />
+        <Button
+            android:id="@+id/Add_Data_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Add Data"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white" />
 
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName" />
+        <Button
+            android:id="@+id/Get_Data_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Get data"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
 
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        <Button
+            android:id="@+id/Delete_Data_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="DELETE DATA"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/signUp_Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_buttons"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Sign Up"
-        android:textAlignment="center" />
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
 
-    <Button
-        android:id="@+id/signIn_Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_buttons"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Sign In"
-        android:textAlignment="center" />
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
 
-    <EditText
-        android:id="@+id/phoneEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="textPersonName" />
+        <Button
+            android:id="@+id/signUp_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Sign Up"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/sendOtp_Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_buttons"
-        android:gravity="center_horizontal"
-        android:padding="15dp"
-        android:text="Send OTP"
-        android:textAlignment="center" />
-</LinearLayout>
+        <Button
+            android:id="@+id/signIn_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Sign In"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:id="@+id/phoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:ems="10"
+            android:hint="Phone Number"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
+
+        <Button
+            android:id="@+id/sendOtp_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Send OTP"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</ScrollView>

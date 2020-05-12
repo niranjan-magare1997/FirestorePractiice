@@ -1,5 +1,8 @@
 package com.example.comeonfirestore;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**                                *** NOTE ***
- *
+/**
+ * ** NOTE ***
+ * <p>
  * 1) Use camelCase for variable and function names
  * 2) Keep your all variable and components private if not needed outside your class
  * 3) Keep your all functions private if not needed outside your class
@@ -42,11 +46,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    /** Use this TAG for your logs and place appropriate logs in your code starting with function name they are in and a pipe as below functions */
+    /**
+     * Use this TAG for your logs and place appropriate logs in your code starting with function name they are in and a pipe as below functions
+     */
     private static String TAG = "Dream_Team";
-    private Button addDataBtn,getDataBtn,signUpBtn,signInBtn,sendOtpBtn;
-    private EditText getName,getSurname,getEmail,getPassword,getPhoneNo;
-    private String name,surname;
+    private Button addDataBtn, getDataBtn, signUpBtn, signInBtn, sendOtpBtn, delDataBtn;
+    private EditText getName, getSurname, getEmail, getPassword, getPhoneNo;
+    private String name, surname;
     private String NAME_KEY = "Name";
     private String SURNAME_KEY = "Surname";
     private FirebaseFirestore db;
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setComponentsValues();
     }
 
-    public void setComponentsValues(){
+    public void setComponentsValues() {
         /** Compulsory use try catch block for your function */
         try {
             Log.d(TAG, "setComponentsValues | In function setComponentsValues ");
@@ -77,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signInBtn = findViewById(R.id.signIn_Button);
             signUpBtn = findViewById(R.id.signUp_Button);
             sendOtpBtn = findViewById(R.id.sendOtp_Button);
+            delDataBtn = findViewById(R.id.Delete_Data_Button);
 
             getName = findViewById(R.id.NameEditText);
             getSurname = findViewById(R.id.SurnameEditText);
@@ -89,69 +96,85 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signInBtn.setOnClickListener(MainActivity.this);
             signUpBtn.setOnClickListener(MainActivity.this);
             sendOtpBtn.setOnClickListener(MainActivity.this);
+            delDataBtn.setOnClickListener(MainActivity.this);
 
             Log.d(TAG, "setComponentsValues | Done with setting Components Values ");
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "setComponentsValues | Exception in setComponentsValues function: " + e.getMessage());
         }
     }
 
-    public void makeToast(String msg){
+    public void makeToast(String msg) {
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public String[] listToArray(List<String> list){
-        Log.d(TAG, "List size: "+list.size());
+    public String[] listToArray(List<String> list) {
+        Log.d(TAG, "List size: " + list.size());
         String[] array = new String[list.size()];
-        for(int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             array[i] = list.get(i);
-            Log.d(TAG, i+"th Element "+list.get(i));
+            Log.d(TAG, i + "th Element " + list.get(i));
         }
         return array;
     }
 
     @Override
     public void onClick(View v) {
-        try{
+        try {
             Log.d(TAG, "onClick | In function onClick");
 
-            name = getName.getText().toString();
-            surname = getSurname.getText().toString();
+            ConnectivityManager cm = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-            switch(v.getId()){
-                case R.id.Add_Data_Button:
-                    Toast.makeText(this, "Add_Data Button Clicked", Toast.LENGTH_SHORT).show();
-                    addDataFun();
-                    //addSomething();
-                    //addData();
-                    break;
-                case R.id.Get_Data_Button:
-                    Toast.makeText(this, "Get Data Button Clicked", Toast.LENGTH_SHORT).show();
-                    getData();
-                    break;
-                case R.id.signIn_Button:
-                    Toast.makeText(this, "Sign In Button Clicked", Toast.LENGTH_SHORT).show();
-                    signInUser();
-                    break;
-                case R.id.signUp_Button:
-                    Toast.makeText(this, "Sign Up Button Clicked", Toast.LENGTH_SHORT).show();
-                    signUpUser();
-                    break;
-                case R.id.sendOtp_Button:
-                    Toast.makeText(this, "Send OTP Button Clicked", Toast.LENGTH_SHORT).show();
-                    sendOtp();
-                    break;
-                default:
-                    Toast.makeText(this, "This is default case", Toast.LENGTH_SHORT).show();
-                    break;
+            if (isConnected) {
+                switch (v.getId()) {
+                    case R.id.Add_Data_Button:
+                        Toast.makeText(this, "Add_Data Button Clicked", Toast.LENGTH_SHORT).show();
+                        addDataFun();
+                        //addSomething();
+                        //addData();
+                        break;
+                    case R.id.Get_Data_Button:
+                        Toast.makeText(this, "Get Data Button Clicked", Toast.LENGTH_SHORT).show();
+                        getData();
+                        break;
+                    case R.id.signIn_Button:
+                        Toast.makeText(this, "Sign In Button Clicked", Toast.LENGTH_SHORT).show();
+                        signInUser();
+                        break;
+                    case R.id.signUp_Button:
+                        Toast.makeText(this, "Sign Up Button Clicked", Toast.LENGTH_SHORT).show();
+                        signUpUser();
+                        break;
+                    case R.id.sendOtp_Button:
+                        Toast.makeText(this, "Send OTP Button Clicked", Toast.LENGTH_SHORT).show();
+                        sendOtp();
+                        break;
+                    case R.id.Delete_Data_Button:
+                        Toast.makeText(this, "Delete Data Button Clicked", Toast.LENGTH_SHORT).show();
+                        deleteData();
+                        break;
+                    default:
+                        Toast.makeText(this, "This is default case", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            } else {
+                makeToast("Please check your internet connectivity");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "onClick | Exception in onClick function: " + e.getMessage());
         }
     }
 
+    private void deleteData() {
+        String name = getName.getText().toString();
+        String sName = getSurname.getText().toString();
+        database.deleteEmployee(name, sName);
+    }
+
     private void sendOtp() {
-        try{
+        try {
             Log.d(TAG, "sendOtp | In function sendOtp() ");
             String phNo = getPhoneNo.getText().toString();
             makeToast("Number  : " + phNo);
@@ -160,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
-                    makeToast("OTP Sent to number"+s);
+                    makeToast("OTP Sent to number");
                     Log.d(TAG, "Verification code sent. ");
                 }
 
@@ -183,29 +206,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "Code verification failed " + e.toString());
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "sendOtp | Exception in sendOtp: " + e.getMessage());
         }
     }
 
-    private void addDataFun(){
+    private void addDataFun() {
         try {
             Log.d(TAG, "addDataFun | In function addDataFun: ");
             String name = getName.getText().toString();
             String sName = getSurname.getText().toString();
 
-            Map<String,Object> emp = new HashMap<>();
-                emp.put(NAME_KEY,name);
-                emp.put(SURNAME_KEY,sName);
+            Map<String, Object> emp = new HashMap<>();
+            emp.put(NAME_KEY, name);
+            emp.put(SURNAME_KEY, sName);
 
             database.addEmployee(emp);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "addDataFun |  Exception while adding data: " + e.getMessage());
         }
     }
 
-    private void addSomething(){
-        try{
+    private void addSomething() {
+        try {
             Log.d(TAG, "addSomething | In function onClick");
             /*
             List<String> integerList = new ArrayList<>(2);
@@ -221,13 +244,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String sName = getSurname.getText().toString();
 
             Map<String, Object> map2 = new HashMap<>();
-            map2.put("extra1","My Value 2");
-            map2.put("extra2","My value");
+            map2.put("extra1", "My Value 2");
+            map2.put("extra2", "My value");
 
-            Map<String,Object> map = new HashMap<>();
-            map.put("Name",nm);
-            map.put("Surname",sName);
-            map.put("The Extra Field",map2);
+            Map<String, Object> map = new HashMap<>();
+            map.put("Name", nm);
+            map.put("Surname", sName);
+            map.put("The Extra Field", map2);
 
             db.collection("Database").document("DB=1")
                     /**SetOptions.merge() will work same as update() method,
@@ -244,14 +267,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "addSomething | Add Failed");
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "addSomething | Exception in addSomething: " + e.getMessage());
         }
     }
 
     private void addData() {
         final String TAG = "MainActivity | addData ";
-        try{
+        try {
             Log.d(TAG, "In function addData");
             String[] arrayValue = {
                     "First Array Value",
@@ -259,22 +282,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             };
             List<String> array = Arrays.asList(arrayValue);
 
-            Map<String, Object> user = new HashMap<>() ;
-            user.put(NAME_KEY,name);
-            user.put(SURNAME_KEY,surname);
+            Map<String, Object> user = new HashMap<>();
+            user.put(NAME_KEY, name);
+            user.put(SURNAME_KEY, surname);
             /** Adding array as a value for key "Array" */
-            user.put("Array",array);
+            user.put("Array", array);
 
             /**To add values in document use .set() method*/
-            db.collection("Whole_Hotel").document(name+"_Id")
-                .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    makeToast("Value added");
-                }else{
-                    makeToast("Failed to add value");
-                }
+            db.collection("Whole_Hotel").document(name + "_Id")
+                    .set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        makeToast("Value added");
+                    } else {
+                        makeToast("Failed to add value");
+                    }
                 }
             });
 
@@ -293,32 +316,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         makeToast("Add Data Failed");
                     }
                 });*/
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "Exception in Function addData => \n" + e.getMessage());
         }
     }
 
     private void getData() {
-        try{
+        try {
             Log.d(TAG, "getData | In function getData");
 
             db.collection("Employee")
-                /**QUERY*/
-                .whereEqualTo(NAME_KEY,"Niranjan")
-                .whereEqualTo(SURNAME_KEY,"Magare")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful()){
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Log.d(TAG, "getData | ID: " + document.getId() + " => " + "Data: " + document.getData());
+                    /**QUERY*/
+                    .whereEqualTo(NAME_KEY, "Niranjan")
+                    .whereEqualTo(SURNAME_KEY, "Magare")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, "getData | ID: " + document.getId() + " => " + "Data: " + document.getData());
+                                }
+                            } else {
+                                Log.e(TAG, "getData | Failed to get data");
+                            }
                         }
-                    }else{
-                        Log.e(TAG, "getData | Failed to get data");
-                    }
-                    }
-                });
+                    });
             /**This is the code to get data from collection*/
             /*db.collection("Whole_Hotel")
                     .get()
@@ -356,55 +379,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 makeToast("Failed to fetch data"+e.toString());
             }
         });*/
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "getData | Exception in getData function: " + e.getMessage());
         }
     }
 
-    private void signUpUser(){
-        try{
+    private void signUpUser() {
+        try {
             Log.d(TAG, "signUpUser | In function signUpUser ");
             String email = getEmail.getText().toString();
             String password = getPassword.getText().toString();
 
             mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signUpUser | createUserWithEmail success");
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.e(TAG, "signUpUser | createUserWithEmail failure", task.getException());
-                    }
-                    }
-                });
-        }catch (Exception e){
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signUpUser | createUserWithEmail success");
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.e(TAG, "signUpUser | createUserWithEmail failure", task.getException());
+                            }
+                        }
+                    });
+        } catch (Exception e) {
             Log.e(TAG, "signUpUser | Exception in signUpUser " + e.getMessage());
         }
     }
 
-    private void signInUser(){
-        try{
+    private void signInUser() {
+        try {
             Log.d(TAG, "signInUser | In function signInUser");
             String email = getEmail.getText().toString();
             String password = getPassword.getText().toString();
 
             mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInUser | signInWithEmail success");
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.e(TAG, "signInUser | signInWithEmail failure", task.getException());
-                    }
-                    }
-                });
-        }catch (Exception e){
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInUser | signInWithEmail success");
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.e(TAG, "signInUser | signInWithEmail failure", task.getException());
+                            }
+                        }
+                    });
+        } catch (Exception e) {
             Log.e(TAG, "signInUser | Exception in signInUser: " + e.getMessage());
         }
     }
