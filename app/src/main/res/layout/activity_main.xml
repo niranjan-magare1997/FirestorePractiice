@@ -132,9 +132,10 @@
             android:background="@drawable/rounded_buttons"
             android:ems="10"
             android:hint="Phone Number"
-            android:inputType="textPersonName"
+            android:inputType="phone"
             android:padding="15dp"
             android:textColor="@android:color/white"
+            android:autofillHints="Phone Number"
             android:textColorHint="@android:color/white" />
 
         <Button
@@ -146,6 +147,31 @@
             android:gravity="center_horizontal"
             android:padding="15dp"
             android:text="Send OTP"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+
+        <EditText
+            android:id="@+id/enterOTPEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:inputType="numberPassword"
+            android:background="@drawable/rounded_buttons"
+            android:padding="15dp"
+            android:hint="Enter OTP"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"/>
+
+        <Button
+            android:id="@+id/Verify_OTP_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_buttons"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="Verify OTP"
             android:textAlignment="center"
             android:textColor="@android:color/white" />
     </LinearLayout>
