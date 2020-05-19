@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Use this TAG for your logs and place appropriate logs in your code starting with function name they are in and a pipe as below functions
      */
     private static String TAG = "Dream_Team";
-    private Button addDataBtn, getDataBtn, signUpBtn, signInBtn, sendOtpBtn, delDataBtn;
-    private EditText getName, getSurname, getEmail, getPassword, getPhoneNo;
+    private Button addDataBtn, getDataBtn, signUpBtn, signInBtn, sendOtpBtn, delDataBtn, verifyOtpBtn;
+    private EditText getName, getSurname, getEmail, getPassword, getPhoneNo, getOtp;
     private String name, surname;
     private String NAME_KEY = "Name";
     private String SURNAME_KEY = "Surname";
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
     private PhoneAuthProvider phoneAuthProvider;
     private Database database;
+    private String verificationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signUpBtn = findViewById(R.id.signUp_Button);
             sendOtpBtn = findViewById(R.id.sendOtp_Button);
             delDataBtn = findViewById(R.id.Delete_Data_Button);
+            verifyOtpBtn = findViewById(R.id.Verify_OTP_Button);
 
             getName = findViewById(R.id.NameEditText);
             getSurname = findViewById(R.id.SurnameEditText);
             getEmail = findViewById(R.id.emailEditText);
             getPassword = findViewById(R.id.passwordEditText);
             getPhoneNo = findViewById(R.id.phoneEditText);
+            getOtp = findViewById(R.id.enterOTPEditText);
 
             addDataBtn.setOnClickListener(MainActivity.this);
             getDataBtn.setOnClickListener(MainActivity.this);
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             signUpBtn.setOnClickListener(MainActivity.this);
             sendOtpBtn.setOnClickListener(MainActivity.this);
             delDataBtn.setOnClickListener(MainActivity.this);
+            verifyOtpBtn.setOnClickListener(MainActivity.this);
 
             Log.d(TAG, "setComponentsValues | Done with setting Components Values ");
         } catch (Exception e) {
@@ -154,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.Delete_Data_Button:
                         Toast.makeText(this, "Delete Data Button Clicked", Toast.LENGTH_SHORT).show();
                         deleteData();
+                    case R.id.Verify_OTP_Button:
+                        verifyOTPManually();
                         break;
                     default:
                         Toast.makeText(this, "This is default case", Toast.LENGTH_SHORT).show();
@@ -167,10 +173,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void verifyOTPManually() {
+        try {
+            Log.d(TAG, "verifyOTPManually | Verifying OTP... ");
+            String userOTP = getOtp.getText().toString();
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, userOTP);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "verifyOTPManually | onComplete | Verification done");
+                    } else {
+                        Log.e(TAG, "verifyOTPManually | onComplete | Verification Failed");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "verifyOTPManually | Exception in verifyOTPManually " + e.getMessage());
+        }
+    }
+
     private void deleteData() {
         String name = getName.getText().toString();
         String sName = getSurname.getText().toString();
-        database.deleteEmployee(name, sName);
+        Log.d(TAG, "deleteData | In deleteData function ");
+        database.deleteEmployee(name, sName, new CallbackInterface() {
+            @Override
+            public void callbackMethod(Integer result) {
+                if (result == 0) {
+                    Log.d(TAG, "callbackMethod | Delete Employee callback: TRUE");
+                } else if (result == 1) {
+                    Log.d(TAG, "callbackMethod | Delete Employee callback: FALSE");
+                } else {
+                    Log.d(TAG, "callbackMethod | Wrong callback result. Something went wrong");
+                }
+            }
+        });
     }
 
     private void sendOtp() {
@@ -179,12 +217,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String phNo = getPhoneNo.getText().toString();
             makeToast("Number  : " + phNo);
 
-            phoneAuthProvider.verifyPhoneNumber(phNo.trim(), 60L, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            phoneAuthProvider.verifyPhoneNumber("+91" + phNo.trim(), 60L, TimeUnit.SECONDS, this, new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 @Override
                 public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(s, forceResendingToken);
-                    makeToast("OTP Sent to number");
+                    makeToast("OTP Sent");
                     Log.d(TAG, "Verification code sent. ");
+                    verificationID = s;
                 }
 
                 @Override
@@ -221,7 +260,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             emp.put(NAME_KEY, name);
             emp.put(SURNAME_KEY, sName);
 
-            database.addEmployee(emp);
+            database.addEmployee(emp, new CallbackInterface() {
+                @Override
+                public void callbackMethod(Integer result) {
+                    if (result == 0) {
+                        Log.d(TAG, "callbackMethod | Employee Added");
+                    } else if (result == 1) {
+                        Log.d(TAG, "callbackMethod | ERROR while adding employee");
+                    } else if (result == 2) {
+                        Log.d(TAG, "callbackMethod | Employee already exist");
+                    } else {
+                        Log.d(TAG, "callbackMethod | Wrong callback result. Something went wrong");
+                    }
+                }
+            });
         } catch (Exception e) {
             Log.e(TAG, "addDataFun |  Exception while adding data: " + e.getMessage());
         }
@@ -273,7 +325,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addData() {
-        final String TAG = "MainActivity | addData ";
         try {
             Log.d(TAG, "In function addData");
             String[] arrayValue = {
@@ -324,11 +375,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getData() {
         try {
             Log.d(TAG, "getData | In function getData");
+            MakeDialogue makeDialogue = new MakeDialogue();
+            makeDialogue.show(getSupportFragmentManager(), "Example text");
 
             db.collection("Employee")
                     /**QUERY*/
-                    .whereEqualTo(NAME_KEY, "Niranjan")
-                    .whereEqualTo(SURNAME_KEY, "Magare")
+                    /*.whereEqualTo(NAME_KEY, "Niranjan")
+                    .whereEqualTo(SURNAME_KEY, "Magare")*/
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

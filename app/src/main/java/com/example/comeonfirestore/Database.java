@@ -36,7 +36,7 @@ public class Database {
         return random;
     }
 
-    public void addEmployee(final Map<String, Object> map) {
+    public void addEmployee(final Map<String, Object> map, final CallbackInterface callbackInterface) {
         try {
             Log.d(TAG, "addEmployee | In function addEmployee() ");
             final String newEmpId = "EMP_" + generateNewId().toString();
@@ -51,6 +51,7 @@ public class Database {
                                 String name = documentSnapshot.getString("Name");
                                 String surname = documentSnapshot.getString("Surname");
                                 Log.d(TAG, "addEmployee | Name: " + name + " Surname: " + surname);
+                                callbackInterface.callbackMethod(2);
                             } else {
                                 Log.d(TAG, "addEmployee | Employee Not exist already");
 
@@ -65,11 +66,13 @@ public class Database {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "addEmployee | Added new Employee");
+                                                callbackInterface.callbackMethod(0);
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "addEmployee | Failed to add new Employee");
+                                        callbackInterface.callbackMethod(1);
                                     }
                                 });
                             }
@@ -79,15 +82,18 @@ public class Database {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.e(TAG, "addEmployee | Failed to check Employee exist or not");
+                            callbackInterface.callbackMethod(1);
                         }
                     });
         } catch (Exception e) {
             Log.e(TAG, "addEmployee | Exception in addEmployee: " + e.getMessage());
+            callbackInterface.callbackMethod(1);
         }
     }
 
-    public void deleteEmployee(String empName, String empSurname) {
+    public void deleteEmployee(String empName, String empSurname, final CallbackInterface callbackInterface) {
         try {
+            Log.d(TAG, "deleteEmployee | In function deleteEmployee");
             db.collection("Employee")
                     .whereEqualTo("Name", empName)
                     .whereEqualTo("Surname", empSurname)
@@ -96,24 +102,39 @@ public class Database {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(TAG, "getData | ID: " + document.getId() + " => " + "Data: " + document.getData());
-                                    db.collection("Employee").document(document.getId())
-                                            .delete()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "deleteEmployee | Employee deleted");
-                                                }
-                                            });
+                                if (task.getResult().isEmpty()) {
+                                    Log.d(TAG, "deleteEmployee | getResult is empty ");
+                                    callbackInterface.callbackMethod(1);
+                                } else {
+                                    Log.d(TAG, "deleteEmployee | getResult have some document ");
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, "getData | ID: " + document.getId() + " => " + "Data: " + document.getData());
+                                        db.collection("Employee").document(document.getId())
+                                                .delete()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d(TAG, "deleteEmployee | Employee deleted");
+                                                        callbackInterface.callbackMethod(0);
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "deleteEmployee | Exception in getting Employee ");
+                                                callbackInterface.callbackMethod(1);
+                                            }
+                                        });
+                                    }
                                 }
                             } else {
                                 Log.e(TAG, "deleteEmployee | Exception in getting Employee ");
+                                callbackInterface.callbackMethod(1);
                             }
                         }
                     });
         } catch (Exception e) {
             Log.e(TAG, "deleteEmployee | Exception in deleteEmployee " + e.getMessage());
+            callbackInterface.callbackMethod(1);
         }
     }
 }
